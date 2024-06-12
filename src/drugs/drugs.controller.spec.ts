@@ -42,7 +42,7 @@ describe('DrugsController', () => {
         approved: true,
         min_dose: 1,
         max_dose: 10,
-        available_at: '2023-12-31',
+        available_at: new Date('2023-12-31'),
       };
       const result = { ...drugDto, id: '1' };
       mockDrugsService.create.mockResolvedValue(result);
@@ -79,7 +79,7 @@ describe('DrugsController', () => {
         approved: false,
         min_dose: 0,
         max_dose: 0,
-        available_at: '',
+        available_at: new Date(''),
       };
       const result = { ...updateDto, id: '1' };
       mockDrugsService.update.mockResolvedValue(result);
@@ -90,12 +90,17 @@ describe('DrugsController', () => {
   });
 
   describe('remove', () => {
+    // should remove a drug
     it('should remove a drug', async () => {
-      const result = { affected: 1 };
+      const result = {
+        message: 'Drug with ID 1 has been deleted',
+        statusCode: 200,
+        data: { affected: 1 },
+      };
       mockDrugsService.remove.mockResolvedValue(result);
 
       expect(await controller.remove('1')).toEqual(result);
-      expect(service.remove).toHaveBeenCalledWith('1');
+      expect(service.remove).toHaveBeenCalledWith({ id: '1' });
     });
   });
 });
