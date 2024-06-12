@@ -6,10 +6,11 @@ import {
   IsNumber,
   IsNotEmpty,
   IsBoolean,
-  IsDateString,
   Min,
+  IsDate,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
 
 export class UpdateDrugDto extends PartialType(CreateDrugDto) {
   @ApiProperty({ example: 'Aspirin', description: 'The name of the drug' })
@@ -36,6 +37,7 @@ export class UpdateDrugDto extends PartialType(CreateDrugDto) {
     example: '2023-12-31',
     description: 'Availability date of the drug',
   })
-  @IsDateString({}, { message: 'Availability date must be a valid date' })
-  available_at: string;
+  @Transform(({ value }) => new Date(value))
+  @IsDate({ message: 'The date must be a valid date' })
+  available_at: Date;
 }

@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
 import {
   IsDate,
   IsNotEmpty,
@@ -21,6 +22,8 @@ export class CreateVaccinationDto {
     description: 'The drug identification string',
   })
   @IsString({ message: 'The drug_id must be a string value' })
+  @IsNotEmpty({ message: 'The drug_id cannot be empty' })
+  @MinLength(3, { message: 'The drug_id must be at least 3 characters' })
   drug_id: string;
 
   @ApiProperty({
@@ -34,6 +37,7 @@ export class CreateVaccinationDto {
     example: '2012-04-23T18:25:43.511Z',
     description: 'The date of the vaccination',
   })
+  @Transform(({ value }) => new Date(value))
   @IsDate({ message: 'The date must be a valid date' })
   date: Date;
 }

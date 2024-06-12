@@ -8,13 +8,13 @@ import {
   IsNumber,
   IsDate,
 } from 'class-validator';
+import { Transform } from 'class-transformer';
 
 export class UpdateVaccinationDto extends PartialType(CreateVaccinationDto) {
   @ApiProperty({
     example: 'John Doe',
     description: 'Patient name',
   })
-  @IsString({ message: 'The name must be a text string' })
   @IsNotEmpty({ message: 'The name cannot be empty' })
   @MinLength(3, { message: 'The name must be at least 3 characters' })
   name: string;
@@ -24,6 +24,8 @@ export class UpdateVaccinationDto extends PartialType(CreateVaccinationDto) {
     description: 'The drug identification string',
   })
   @IsString({ message: 'The drug_id must be a string value' })
+  @IsNotEmpty({ message: 'The drug_id cannot be empty' })
+  @MinLength(3, { message: 'The drug_id must be at least 3 characters' })
   drug_id: string;
 
   @ApiProperty({
@@ -34,9 +36,10 @@ export class UpdateVaccinationDto extends PartialType(CreateVaccinationDto) {
   dose: number;
 
   @ApiProperty({
-    example: '2012-04-23T18:25:43.511Z',
+    example: '2024-06-12T00:05:53.356Z',
     description: 'The date of the vaccination',
   })
+  @Transform(({ value }) => new Date(value))
   @IsDate({ message: 'The date must be a valid date' })
   date: Date;
 }

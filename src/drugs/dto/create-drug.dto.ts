@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
 import {
   IsBoolean,
   IsNotEmpty,
@@ -6,7 +7,7 @@ import {
   IsString,
   Min,
   MinLength,
-  IsDateString,
+  IsDate,
 } from 'class-validator';
 
 export class CreateDrugDto {
@@ -34,6 +35,7 @@ export class CreateDrugDto {
     example: '2023-12-31',
     description: 'Availability date of the drug',
   })
-  @IsDateString({}, { message: 'Availability date must be a valid date' })
-  available_at: string;
+  @Transform(({ value }) => new Date(value))
+  @IsDate({ message: 'The date must be a valid date' })
+  available_at: Date;
 }
