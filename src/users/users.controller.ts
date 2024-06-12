@@ -5,5 +5,5 @@ import { UsersService } from './users.service';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  // User creation is managed by the AuthGuard
+  // User controllers is managed by the AuthGuard
 }
