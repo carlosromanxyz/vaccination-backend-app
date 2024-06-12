@@ -1,4 +1,9 @@
-import { HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateDrugDto } from './dto/create-drug.dto';
 import { UpdateDrugDto } from './dto/update-drug.dto';
 import { Drug } from './entities/drug.entity';
@@ -13,6 +18,9 @@ export class DrugsService {
     private readonly drugRepository: Repository<Drug>,
   ) {}
   create(createDrugDto: CreateDrugDto) {
+    if (Object.keys(createDrugDto).length === 0) {
+      throw new BadRequestException('The drug object cannot be empty');
+    }
     return this.drugRepository.save(createDrugDto);
   }
 
@@ -30,15 +38,24 @@ export class DrugsService {
     if (!drug) {
       throw new NotFoundException(`Drug with ID ${id} not found`);
     }
+
+    if (Object.keys(drug).length === 0) {
+      throw new BadRequestException(`Drug object is empty`);
+    }
     return drug;
   }
 
   async update(id: string, updateDrugDto: UpdateDrugDto) {
-    await this.drugRepository.update(id, updateDrugDto);
-    const updatedDrug = await this.drugRepository.findOne({ where: { id } });
-    if (!updatedDrug) {
+    const result = await this.drugRepository.update(id, updateDrugDto);
+    if (result.affected === 0) {
       throw new NotFoundException(`Drug with ID ${id} not found`);
     }
+
+    const updatedDrug = await this.drugRepository.findOne({ where: { id } });
+    if (!updatedDrug) {
+      throw new NotFoundException(`Drug with ID ${id} not found after update`);
+    }
+
     return updatedDrug;
   }
 
@@ -47,15 +64,14 @@ export class DrugsService {
     const result = await this.drugRepository.delete(id);
     if (result.affected === 0) {
       throw new NotFoundException(`Drug with ID ${id} not found`);
-    }
-
-    if (result.affected === 1) {
-      // Return code HttpException with message
+    } else if (!result.affected) {
+      throw new Error('Invalid result object from delete operation');
+    } else {
       return {
+        message: `Drug with ID ${id} has been deleted`,
         statusCode: HttpStatus.OK,
-        message: 'Drug succefully deleted',
+        data: result,
       };
     }
-    return result;
   }
 }
