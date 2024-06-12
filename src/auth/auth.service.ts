@@ -4,7 +4,7 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { UsersService } from './../../src/users/users.service';
+import { UsersService } from '../users/users.service';
 import { SignupDto } from './dto/signup.dto';
 import * as bcrypt from 'bcrypt';
 import { LoginDto } from './dto/login.dto';
