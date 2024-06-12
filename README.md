@@ -6,11 +6,9 @@
 
 1. Ensure if Docker is installed on your machine typing in a terminal `docker -v`.
 2. Clone or download this repo.
-3. Use your terminal and open it, then run `docker-compose up`, add `-d` if you don't need watch the logs.
-4. Check on Docker Desktop if the database called db on "vaccination-backend-app" is running.
-
-# Environment variables
-1. Copy `.env.example` variables and use yours
+3. Copy `.env.example` variables and add your values and save it as `.env` filename
+4. Use your terminal and open it, then run `docker-compose up`, add `-d` if you don't need watch the logs.
+5. Check on Docker Desktop if the database called db on "vaccination-backend-app" is running.
 
 # Initialize app
 
@@ -21,4 +19,4 @@
 
 # API documentation
 
-1. After server start, you can go to `http://localhost:3000/api` (Based on Swagger)
+1. After server start, you can go to `http://localhost:3000/api`
