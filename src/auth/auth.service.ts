@@ -4,7 +4,7 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { UsersService } from 'src/users/users.service';
+import { UsersService } from './../../src/users/users.service';
 import { SignupDto } from './dto/signup.dto';
 import * as bcrypt from 'bcrypt';
 import { LoginDto } from './dto/login.dto';
@@ -22,6 +22,8 @@ export class AuthService {
 
     if (user) {
       throw new BadRequestException('User already exists');
+    } else if (password === '') {
+      throw new BadRequestException('Password cannot be empty');
     } else {
       await this.usersService.create({
         name,

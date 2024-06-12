@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
-import { IsEmail, IsString, MinLength } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsString, MinLength } from 'class-validator';
+import { IsNull } from 'typeorm';
 
 export class SignupDto {
   @ApiProperty({
@@ -15,10 +16,11 @@ export class SignupDto {
   @ApiProperty({ example: 'user@example.com', description: 'Name of the user' })
   @Transform(({ value }) => value.trim())
   @IsEmail()
+  @IsNotEmpty()
   email: string;
 
   @ApiProperty({ example: 'password123', description: 'Password of the user' })
   @IsString()
-  @MinLength(8)
+  @IsNotEmpty()
   password: string;
 }
